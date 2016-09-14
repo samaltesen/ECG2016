@@ -16,3 +16,9 @@ FILE* openfile(const char* filename)
 
    return file;
 }
+
+void closefile(FILE* file)
+{
+   close(file); // Replace NULL with the actual file object
+
+}

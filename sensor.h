@@ -8,7 +8,9 @@
 // as much as you like
 
 FILE* openfile(const char* filename);
+void closefile(FILE* file);
 
 int getNextData(FILE *file);
+
 
 #endif // SENSOR_H

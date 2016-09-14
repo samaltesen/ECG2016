@@ -4,11 +4,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
 // Main function for organizing the program execution.
 // The functions and object predefined are just for inspiration.
 // Please change orden,names arguments to fit your solution.
 // Defining the stack structure
 
+void newSignal(int arr[], int arr_Length, int signal) {
+
+	for(int i = arr_Length; i > 0; i--) {
+		arr[i] = arr[i-1];
+	}
+	arr[0] = signal;
+}
 
 
 int main()
@@ -17,9 +26,34 @@ int main()
 	FILE *file;                  // Pointer to a file object
 	file = openfile("ECG.txt");
 
-	printf("%d", getNextData(file));          // Read Data from Sensor
-                                
-    lowPassFilter();            // Filter Data
+	FILE *lp;
+	lp = fopen("DataFiles\lp_ECG.txt", "w");
+
+	FILE *hp;
+	hp = fopen("DataFiles\hp_ECG.txt", "w");
+
+	int signal_Length = 13;
+	int signal[13] = { 0 };
+
+	int lowPass_Length = 33;
+	int lowPass[33] = { 0 };
+
+	int highPass_Length = 5;
+	int highPass[5] = { 0 };
+
+	int k = 33;
+	while(!feof (file) && k > 0) {
+
+		newSignal(signal, signal_Length, getNextData(file));
+		newSignal(lowPass, lowPass_Length, lowPassFilter(signal, lowPass));
+		newSignal(highPass, highPass_Length, highPassFilter(lowPass, highPass));
+
+		fprintf(lp, "%d\n", lowPass[0]);
+		fprintf(hp, "%d\n", highPass[0]);
+
+	}
+
+
                                 
     peakDetection(&qsr_params); // Perform Peak Detection
 

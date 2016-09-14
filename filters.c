@@ -16,3 +16,32 @@ int highPassFilter(int lowPass[], int highPass[]) {
 
 	return yn;
 }
+
+int derivativeFilter(int highPass[]) {
+
+	int yn = (2*highPass[0] +highPass[1] - highPass[3] - 2*highPass[4])/8;
+
+	return yn;
+}
+
+int squaredFilter(int derivative[]) {
+
+	int yn = derivative[0] * derivative[0];
+
+	return yn;
+}
+
+
+int mwiFilter(int squared[]) {
+
+	static int sum = 0;
+
+	sum = sum - (squared[29]/30) + (squared[0]/30);
+
+	return sum;
+
+}
+
+
+
+

@@ -60,10 +60,10 @@ int main()
 	int mwi_Length = 3;
 	int mwi[3] = {0};
 
-	int k = 33;
-	while(!feof (file) && k > 0) {
+	int i = 1;
+	while(!feof (file)) {
 
-		printf("It's alive!!!!!!!!\n");
+		printf("%d. It's alive!!!!!!!!\n", i);
 
 
 		newSignal(signal, signal_Length, getNextData(file));
@@ -78,6 +78,8 @@ int main()
 		fprintf(der, "%d\n", derivative[0]);
 		fprintf(squ, "%d\n", squared[0]);
 		fprintf(mw, "%d\n", mwi[0]);
+
+		i++;
 
 	}
 

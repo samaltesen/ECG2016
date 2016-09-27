@@ -11,19 +11,13 @@
 // Please change orden,names arguments to fit your solution.
 // Defining the stack structure
 
-void newSignal(int arr[], int arr_Length, int signal) {
+void newSignal(int arr[], int arr_Length, int signal);
 
-	for(int i = arr_Length; i > 0; i--) {
-		arr[i] = arr[i-1];
-	}
-	arr[0] = signal;
-}
+int main() {
+    QRS_params qsr_params;// Instance of the made avaiable through: #include "qsr.h"
+	setStandardParams(&qsr_params);
 
-
-int main()
-{	
-    QRS_params qsr_params;       // Instance of the made avaiable through: #include "qsr.h"
-	FILE *file;                  // Pointer to a file object
+    FILE *file;
 	file = openfile("ECG.txt");
 
 	FILE *lp;
@@ -61,9 +55,12 @@ int main()
 	int mwi[3] = {0};
 
 	int i = 1;
+
+	newSignal(signal, signal_Length, getNextData(file));
+	newSignal(signal, signal_Length, getNextData(file));
+
 	while(!feof (file)) {
 
-		printf("%d. It's alive!!!!!!!!\n", i);
 
 
 		newSignal(signal, signal_Length, getNextData(file));
@@ -79,13 +76,27 @@ int main()
 		fprintf(squ, "%d\n", squared[0]);
 		fprintf(mw, "%d\n", mwi[0]);
 
+		peakDetection(&qsr_params, mwi);
+
 		i++;
+
+
 
 	}
 
-                                
-    peakDetection(&qsr_params); // Perform Peak Detection
+	for(int i=0; i< qsr_params.peakCount; i++ ) {
+		printf("%d. the peak here is %d\n", i, qsr_params.peaks[i]);
+	}
 
 
 	return 0;
+}
+
+
+void newSignal(int arr[], int arr_Length, int signal) {
+
+	for(int i = arr_Length; i > 0; i--) {
+		arr[i] = arr[i-1];
+	}
+	arr[0] = signal;
 }

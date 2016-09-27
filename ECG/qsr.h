@@ -43,8 +43,10 @@ void setStandardParams(QRS_params *params);
 
 void resize(QRS_params *params);
 
-void savePeak(int *arr, int arr_size, int peak);
+void savePeak(int *arr, int arr_size, int RR);
 
 double averageOf(int *arr, int size);
+
+void printR_Peaks(QRS_params *params);
 
 #endif // QSR_H

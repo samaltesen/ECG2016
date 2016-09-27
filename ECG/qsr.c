@@ -37,26 +37,25 @@ int peakDetection(QRS_params *params, int peak, int RR_interval) {
 			params->THRESHOLD2 = params->THRESHOLD1*0.5;
 			return 1;
 
-		} else {
+		} else if(RR_interval > params-> RR_MISS) {
 
-			if(RR_interval > params->RR_MISS) {
-				int i = 1;
-				while(params->peaks[params->peakCount-i] >! params->THRESHOLD2) {
-					i++;
-				}
-
-				savePeak(params->recentRR, 8 , params->peaks[params->peakCount]);
-				params->SPKF = 0.125*params->peaks[params->peakCount] + 0.875*params->SPKF;
-				params->RR_AVERAGE1 = averageOf(params->recentRR, 8);
-				params->RR_LOW = 0.92 * params->RR_AVERAGE2;
-				params->RR_HIGH = 1.16 * params->RR_AVERAGE2;
-				params->RR_MISS = 1.66 * params->RR_AVERAGE2;
-				params->THRESHOLD1 = params->NPKF + 0.25*(params->SPKF - params->NPKF);
-				params->THRESHOLD2 = params->THRESHOLD1*0.5;
-				return 1;
-
-
+			int i = 1;
+			while(params->peaks[params->peakCount-i] >! params->THRESHOLD2 && i<params->peakCount) {
+				i++;
 			}
+
+			savePeak(params->recentRR, 8 , RR_interval);
+			params->SPKF = 0.25*params->peaks[params->peakCount] + 0.75*params->SPKF;
+			params->RR_AVERAGE1 = averageOf(params->recentRR, 8);
+			params->RR_LOW = 0.92 * params->RR_AVERAGE2;
+			params->RR_HIGH = 1.16 * params->RR_AVERAGE2;
+			params->RR_MISS = 1.66 * params->RR_AVERAGE2;
+			params->THRESHOLD1 = params->NPKF + 0.25*(params->SPKF - params->NPKF);
+			params->THRESHOLD2 = params->THRESHOLD1*0.5;
+			return 1;
+
+
+
 
 
 		}
@@ -68,6 +67,7 @@ int peakDetection(QRS_params *params, int peak, int RR_interval) {
 		params->THRESHOLD2 = 0.5*params->THRESHOLD1;
 
 	}
+
 
 	return 0;
 }
@@ -107,20 +107,32 @@ void setStandardParams(QRS_params *params) {
 
 }
 
-void savePeak(int *arr, int arr_size, int peak) {
+void savePeak(int *arr, int arr_size, int RR) {
 
 	for(int i = arr_size; i > 0; i--) {
 			arr[i] = arr[i-1];
 		}
-		arr[0] = peak;
+		arr[0] = RR;
 
 }
 
 double averageOf(int *arr, int size) {
 	int total = 0;
+	int k = 0;
 	for(int i = 0; i<size; i++) {
 		total += arr[i];
+		if(arr[i] != 0)  {
+			k++;
+		}
 	}
 
-	return (double)total/(double)size;
+	return (double)total/(double)k;
+}
+
+void printR_Peaks(QRS_params *params) {
+
+	for(int i = 0; i<100; i++) {
+		printf("%d. \t %d\n", i+1, params->R_peaks[i]);
+	}
+
 }

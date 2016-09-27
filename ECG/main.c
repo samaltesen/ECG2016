@@ -77,7 +77,7 @@ int main() {
 		fprintf(squ, "%d\n", squared[0]);
 		fprintf(mw, "%d\n", mwi[0]);
 
-		printf("%d. \t 0: %d \t 1: %d \t 2:%d \n ", k,  mwi[0], mwi[1], mwi[2]);
+		//printf("%d. \t 0: %d \t 1: %d \t 2:%d \n ", k,  mwi[0], mwi[1], mwi[2]);
 
 		if(mwi[0]< mwi[1] && mwi[1] > mwi[2]) {
 
@@ -94,6 +94,8 @@ int main() {
 
 
 	}
+
+	printR_Peaks(&qsr_params);
 
 	return 0;
 }

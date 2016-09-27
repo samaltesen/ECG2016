@@ -3,14 +3,16 @@
 #include <stdlib.h>
 #include <limits.h>
 
-void peakDetection(QRS_params *params, int mwi[]) {
+void peakDetection(QRS_params *params, int peak) {
 
 	params->RR_interval++;
+	params->peakCount++;
 
-	if(isPeak(params, mwi)) {
-		printf("test");
-		if(mwi[1] > params->THRESHOLD1){
-			params->RR_interval *= 30;
+	params->peaks[params->peakCount] = peak;
+
+	if(1) {
+
+		if(peak > params->THRESHOLD1){
 			if(params->RR_LOW <= params->RR_interval && params->RR_interval <= params->RR_HIGH) {
 
 
@@ -23,11 +25,11 @@ void peakDetection(QRS_params *params, int mwi[]) {
 				}
 				*/
 				params->R_peakCount++;
-				params->R_peaks[params->R_peakCount];
+				params->R_peaks[params->R_peakCount] = params->peaks[params->peakCount];
 
-				savePeak(params->recentRR_OK, 8 , mwi[1]);
-				savePeak(params->recentRR, 8 ,mwi[1]);
-				params->SPKF = 0.125*mwi[1] + 0.875*params->SPKF;
+				savePeak(params->recentRR_OK, 8 , params->peaks[params->peakCount]);
+				savePeak(params->recentRR, 8 ,params->peaks[params->peakCount]);
+				params->SPKF = 0.125*params->peaks[params->peakCount] + 0.875*params->SPKF;
 				params->RR_AVERAGE2 = averageOf(params->recentRR_OK, 8);
 				params->RR_AVERAGE1 = averageOf(params->recentRR, 8);
 				params->RR_LOW = 0.92 * params->RR_AVERAGE2;
@@ -35,6 +37,7 @@ void peakDetection(QRS_params *params, int mwi[]) {
 				params->RR_MISS = 1.66 * params->RR_AVERAGE2;
 				params->THRESHOLD1 = params->NPKF + 0.25*(params->SPKF - params->NPKF);
 				params->THRESHOLD2 = params->THRESHOLD1*0.5;
+				params->RR_interval = 0;
 
 			} else {
 
@@ -44,8 +47,8 @@ void peakDetection(QRS_params *params, int mwi[]) {
 						i++;
 					}
 
-					savePeak(params->recentRR, 8 ,mwi[1]);
-					params->SPKF = 0.125*mwi[1] + 0.875*params->SPKF;
+					savePeak(params->recentRR, 8 , params->peaks[params->peakCount]);
+					params->SPKF = 0.125*params->peaks[params->peakCount] + 0.875*params->SPKF;
 					params->RR_AVERAGE1 = averageOf(params->recentRR, 8);
 					params->RR_LOW = 0.92 * params->RR_AVERAGE2;
 					params->RR_HIGH = 1.16 * params->RR_AVERAGE2;
@@ -53,8 +56,10 @@ void peakDetection(QRS_params *params, int mwi[]) {
 					params->THRESHOLD1 = params->NPKF + 0.25*(params->SPKF - params->NPKF);
 					params->THRESHOLD2 = params->THRESHOLD1*0.5;
 
+
 				}
 
+				params->RR_interval = 0;
 			}
 
 		} else {
@@ -108,22 +113,22 @@ void setStandardParams(QRS_params *params) {
 
 
 }
-
+/*
 int isPeak(QRS_params *params, int mwi[])  {
 
 	if(mwi[0]< mwi[1] && mwi[1] > mwi[2]) {
 		params->peakCount++;
 
-		/*	if(params->peakCount < params->peaksSize) {
+			if(params->peakCount < params->peaksSize) {
 				params->peaks[params->peakCount] =  mwi[1];
 
 			} else {
 				resize(params);
 				params->peaks[params->peakCount] =  mwi[1];
 			}
-		*/
 
-		params->peaks[params->peakCount];
+
+		params->peaks[params->peakCount] = mwi[1];
 		return 1;
 
 	} else {
@@ -133,12 +138,7 @@ int isPeak(QRS_params *params, int mwi[])  {
 
 }
 
-void resize(QRS_params *params) {
-	params->peaksSize *= 2;
-	params->peaks = realloc(params->peaks, params->peaksSize * sizeof(int));
-
-}
-
+*/
 void savePeak(int *arr, int arr_size, int peak) {
 
 	for(int i = arr_size; i > 0; i--) {
@@ -149,7 +149,7 @@ void savePeak(int *arr, int arr_size, int peak) {
 }
 
 double averageOf(int *arr, int size) {
-	int total;
+	int total = 0;
 	for(int i = 0; i<size; i++) {
 		total += arr[i];
 	}

@@ -36,11 +36,11 @@ typedef struct QRS_params
 } QRS_params;
 
 // Feel free to change and add methods
-void peakDetection(QRS_params *params, int mwi[]);
+void peakDetection(QRS_params *params, int peak);
 
 void setStandardParams(QRS_params *params);
 
-int isPeak(QRS_params *params, int mwi[]);
+//int isPeak(QRS_params *params, int mwi[]);
 
 void resize(QRS_params *params);
 

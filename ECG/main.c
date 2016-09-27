@@ -68,7 +68,7 @@ int main() {
 		newSignal(highPass, highPass_Length, highPassFilter(lowPass, highPass));
 		newSignal(derivative, derivative_Length, derivativeFilter(highPass));
 		newSignal(squared, squared_Length, squaredFilter(derivative));
-		newSignal(mwi, mwi_Length, mwiFilter(squared));
+		newSignal(mwi, 3, mwiFilter(squared));
 
 		fprintf(lp, "%d\n", lowPass[0]);
 		fprintf(hp, "%d\n", highPass[0]);
@@ -76,18 +76,20 @@ int main() {
 		fprintf(squ, "%d\n", squared[0]);
 		fprintf(mw, "%d\n", mwi[0]);
 
-		peakDetection(&qsr_params, mwi);
+		printf("%d. \t 0: %d \t 1: %d \t 2:%d \n ", i,  mwi[0], mwi[1], mwi[2]);
+
+		if(mwi[0]< mwi[1] && mwi[1] > mwi[2]) {
+
+
+		peakDetection(&qsr_params, mwi[1]);
+
+		}
 
 		i++;
 
 
 
 	}
-
-	for(int i=0; i< qsr_params.peakCount; i++ ) {
-		printf("%d. the peak here is %d\n", i, qsr_params.peaks[i]);
-	}
-
 
 	return 0;
 }

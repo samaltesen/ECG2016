@@ -20,6 +20,7 @@ typedef struct QRS_params
    int peakCount;
    int peaksSize;
    int peaks[500];
+   int realTime;
 
    int R_peakCount;
    int R_peaksSize;
@@ -27,6 +28,8 @@ typedef struct QRS_params
 
    int recentRR_OK[8];
    int recentRR[8];
+
+   int missedCount;
 
 
    // Add parameters that are missing
@@ -48,5 +51,7 @@ void savePeak(int *arr, int arr_size, int RR);
 double averageOf(int *arr, int size);
 
 void printR_Peaks(QRS_params *params);
+
+void checkPeak(QRS_params *params);
 
 #endif // QSR_H

@@ -18,7 +18,7 @@ int main() {
 	setStandardParams(&qsr_params);
 
     FILE *file;
-	file = openfile("ECG.txt");
+	file = openfile("ECG900K.txt");
 
 	FILE *lp;
 	lp = fopen("lp_ECG.txt", "w");
@@ -83,8 +83,9 @@ int main() {
 
 			if(peakDetection(&qsr_params, mwi[1], i)) {
 				i = 0;
-			}
+				checkPeak(&qsr_params);
 
+			}
 
 		}
 
@@ -95,7 +96,7 @@ int main() {
 
 	}
 
-	printR_Peaks(&qsr_params);
+	//printR_Peaks(&qsr_params);
 
 	return 0;
 }

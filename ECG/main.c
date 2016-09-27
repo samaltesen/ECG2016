@@ -51,10 +51,11 @@ int main() {
 	int squared_Length = 30;
 	int squared[30] = {0};
 
-	int mwi_Length = 3;
+
 	int mwi[3] = {0};
 
 	int i = 1;
+	int k = 1;
 
 	newSignal(signal, signal_Length, getNextData(file));
 	newSignal(signal, signal_Length, getNextData(file));
@@ -76,16 +77,19 @@ int main() {
 		fprintf(squ, "%d\n", squared[0]);
 		fprintf(mw, "%d\n", mwi[0]);
 
-		printf("%d. \t 0: %d \t 1: %d \t 2:%d \n ", i,  mwi[0], mwi[1], mwi[2]);
+		printf("%d. \t 0: %d \t 1: %d \t 2:%d \n ", k,  mwi[0], mwi[1], mwi[2]);
 
 		if(mwi[0]< mwi[1] && mwi[1] > mwi[2]) {
 
+			if(peakDetection(&qsr_params, mwi[1], i)) {
+				i = 0;
+			}
 
-		peakDetection(&qsr_params, mwi[1]);
 
 		}
 
 		i++;
+		k++;
 
 
 

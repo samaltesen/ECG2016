@@ -11,7 +11,6 @@ typedef struct QRS_params
    double NPKF; 
    double THRESHOLD1;
    double THRESHOLD2;
-   int RR_interval;
    double RR_AVERAGE1;
    double RR_AVERAGE2;
    double RR_LOW;
@@ -36,7 +35,7 @@ typedef struct QRS_params
 } QRS_params;
 
 // Feel free to change and add methods
-void peakDetection(QRS_params *params, int peak);
+int peakDetection(QRS_params *params, int peak, int RR_interval);
 
 void setStandardParams(QRS_params *params);
 

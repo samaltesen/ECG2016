@@ -6,6 +6,8 @@
 #include <time.h>
 
 
+// Udarbejdet af Seabstian Ameland Maltesen, s144475
+
 void newSignal(int arr[], int arr_Length, int signal);
 
 int main() {

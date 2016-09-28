@@ -1,6 +1,9 @@
 #include "filters.h"
+#include <time.h>
 
-// Feel free to change return statement and arguments
+
+double cpu_time_used = 0;
+
 int lowPassFilter(int signal[], int lowPass[]) {
 
 
@@ -28,6 +31,7 @@ int squaredFilter(int derivative[]) {
 
 	int yn = derivative[0] * derivative[0];
 
+
 	return yn;
 }
 
@@ -35,8 +39,8 @@ int squaredFilter(int derivative[]) {
 int mwiFilter(int squared[]) {
 
 	static int sum = 0;
+	sum = sum + ((squared[0] - squared[29])/30);
 
-	sum = sum - (squared[29]/30) + (squared[0]/30);
 
 	return sum;
 

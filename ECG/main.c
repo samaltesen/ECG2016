@@ -3,83 +3,47 @@
 #include "qsr.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-
-
-// Main function for organizing the program execution.
-// The functions and object predefined are just for inspiration.
-// Please change orden,names arguments to fit your solution.
-// Defining the stack structure
 
 void newSignal(int arr[], int arr_Length, int signal);
 
 int main() {
-    QRS_params qsr_params;// Instance of the made avaiable through: #include "qsr.h"
+
+
+	QRS_params qsr_params;
 	setStandardParams(&qsr_params);
 
     FILE *file;
-	file = openfile("ECG900K.txt");
+	file = openfile("ECG.txt");
 
-	FILE *lp;
-	lp = fopen("lp_ECG.txt", "w");
-
-	FILE *hp;
-	hp = fopen("hp_ECG.txt", "w");
-
-	FILE *der;
-	der = fopen("deri_ECG.txt", "w");
-
-	FILE *squ;
-	squ = fopen("squ_ECG.txt", "w");
-
-	FILE *mw;
-	mw = fopen("mwi_ECG.txt", "w");
-
-
-	int signal_Length = 13;
 	int signal[13] = { 0 };
-
-	int lowPass_Length = 33;
 	int lowPass[33] = { 0 };
-
-	int highPass_Length = 5;
 	int highPass[5] = { 0 };
-
-	int derivative_Length =  1;
 	int derivative[1] = {0};
-
-	int squared_Length = 30;
 	int squared[30] = {0};
-
-
 	int mwi[3] = {0};
 
 	int i = 1;
-	int k = 1;
-
-	newSignal(signal, signal_Length, getNextData(file));
-	newSignal(signal, signal_Length, getNextData(file));
 
 	while(!feof (file)) {
 
 
+		newSignal(signal, 13, getNextData(file));
 
-		newSignal(signal, signal_Length, getNextData(file));
-		newSignal(lowPass, lowPass_Length, lowPassFilter(signal, lowPass));
-		newSignal(highPass, highPass_Length, highPassFilter(lowPass, highPass));
-		newSignal(derivative, derivative_Length, derivativeFilter(highPass));
-		newSignal(squared, squared_Length, squaredFilter(derivative));
+		newSignal(lowPass, 33, lowPassFilter(signal, lowPass));
+
+		newSignal(highPass, 5, highPassFilter(lowPass, highPass));
+
+		newSignal(derivative, 1, derivativeFilter(highPass));
+
+		newSignal(squared, 30, squaredFilter(derivative));
+
 		newSignal(mwi, 3, mwiFilter(squared));
 
-		fprintf(lp, "%d\n", lowPass[0]);
-		fprintf(hp, "%d\n", highPass[0]);
-		fprintf(der, "%d\n", derivative[0]);
-		fprintf(squ, "%d\n", squared[0]);
-		fprintf(mw, "%d\n", mwi[0]);
 
-		//printf("%d. \t 0: %d \t 1: %d \t 2:%d \n ", k,  mwi[0], mwi[1], mwi[2]);
 
-		if(mwi[0]< mwi[1] && mwi[1] > mwi[2]) {
+		if((mwi[0]< mwi[1] && mwi[1] >= mwi[2]) ) {
 
 			if(peakDetection(&qsr_params, mwi[1], i)) {
 				i = 0;
@@ -90,13 +54,12 @@ int main() {
 		}
 
 		i++;
-		k++;
 
 
 
 	}
 
-	//printR_Peaks(&qsr_params);
+
 
 	return 0;
 }
